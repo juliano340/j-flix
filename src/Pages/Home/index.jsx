@@ -1,13 +1,16 @@
 // http://api.themoviedb.org/3/movie/now_playing?api_key=bf13d212e86d995a4f0b9809db21ee89&language=pt-BR
 
+import './home.css';
+
 import { useEffect } from "react";
 import { useState } from "react";
 import api from    './../../services/api';
+import { Link } from 'react-router-dom';
 
 
 function Home() {
 
-    const [filme, setFilme] = useState([]);
+    const [filmes, setFilmes] = useState([]);
 
     useEffect(()=> {
 
@@ -22,7 +25,7 @@ function Home() {
                 }
             })
 
-            console.log(response.data.results);
+            setFilmes(response.data.results.slice(0,10));
         }
 
         loadFilms()
@@ -31,8 +34,18 @@ function Home() {
 
 
     return(
-        <div> 
-            <h1> Home - Bem vindo</h1> 
+        <div className="container"> 
+            <div className="lista-filmes">
+                {filmes.map((filme) => {
+                    return (
+                        <article key="filme.id">
+                            <strong >{filme.title}</strong>
+                            <img src={`https://image.tmdb.org/t/p/original/${filme.poster_path}`} alt={filme.title} />
+                            <Link to={`/filme/${filme.id}`}> Acessar </Link>
+                        </article>
+                    )
+                })}
+            </div>
         </div>
     )
     
